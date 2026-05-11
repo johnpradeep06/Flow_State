@@ -86,8 +86,22 @@ The project consists of two main components:
    ```
    *The frontend dashboard will start running (typically at `http://localhost:5173` or `3000`).*
 
+---
+
+## Local Webhook Testing with Ngrok
+
+Because Recall.ai needs to send transcription data back to your server over the internet, you cannot use `localhost` for webhooks. You must expose your local port 8000 to the internet using **ngrok**.
+
+1. **Install Ngrok** from [ngrok.com/download](https://ngrok.com/download).
+2. **Open a new terminal window** and run:
+   ```bash
+   ngrok http 8000
+   ```
+3. **Copy the Forwarding URL** from the terminal output (it will look something like `https://a1b2-c3d4.ngrok-free.app`).
+4. **Use this URL:** Update the hardcoded `webhook_url` in `backend/main.py` to match your new ngrok address, or pass it dynamically from your frontend when calling `/session/start`.
+   *Note: Free ngrok URLs change every time you restart ngrok.*
+
 ## Deployment Notes
-Before deploying to production, make sure to update:
 - **CORS origins** in `main.py` to match your frontend domain.
 - **Webhook Fallback URL** in `main.py` to your backend's public HTTPS URL.
 - Use `wss://` instead of `ws://` in your frontend WebSocket connection.
