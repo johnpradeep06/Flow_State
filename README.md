@@ -22,28 +22,69 @@ The project consists of two main components:
 - Gemini API Key
 
 ### Backend Setup
-1. Navigate to the backend directory:
+
+1. **Navigate to the backend directory:**
    ```bash
-   cd backend
+   cd clarity-agent/backend
    ```
-2. Install dependencies:
+
+2. **Create a virtual environment:**
+   This keeps your Python packages isolated.
+   ```bash
+   python -m venv .venv
+   ```
+
+3. **Activate the virtual environment:**
+   * **Windows (PowerShell):**
+     ```powershell
+     .\.venv\Scripts\Activate
+     ```
+   * **Mac/Linux:**
+     ```bash
+     source .venv/bin/activate
+     ```
+   *(You should see `(.venv)` appear in your terminal prompt)*
+
+4. **Install backend dependencies:**
    ```bash
    pip install -r requirements.txt
    ```
-3. Set up your `.env` file:
+
+5. **Set up your environment variables:**
+   Create a `.env` file in the `backend` folder and add your API keys:
    ```env
    RECALL_API_KEY=your_recall_key
    GEMINI_API_KEY=your_gemini_key
    ```
-4. Run the server:
+
+6. **Run the FastAPI server:**
    ```bash
    uvicorn main:app --reload
    ```
+   *The backend will start running at `http://localhost:8000`.*
+
+---
 
 ### Frontend Setup
-1. Navigate to your frontend directory.
-2. Install dependencies (e.g., `npm install`).
-3. Start the development server (`npm run dev`).
+
+1. **Open a new terminal window** (leave the backend running in the first one).
+
+2. **Navigate to the frontend directory:**
+   *(Assuming your frontend is in a folder named `frontend` or `ui`)*
+   ```bash
+   cd clarity-agent/frontend
+   ```
+
+3. **Install Node dependencies:**
+   ```bash
+   npm install
+   ```
+
+4. **Start the React development server:**
+   ```bash
+   npm run dev
+   ```
+   *The frontend dashboard will start running (typically at `http://localhost:5173` or `3000`).*
 
 ## Deployment Notes
 Before deploying to production, make sure to update:
