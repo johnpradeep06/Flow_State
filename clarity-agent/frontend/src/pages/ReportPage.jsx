@@ -30,7 +30,18 @@ import {
 export default function ReportPage() {
   const navigate = useNavigate();
   const report = useSessionStore((s) => s.report);
-  const { companyId, projectId, activeMeetingId, transcript, ambiguities, resolved } = useSessionStore();
+  const { companyId: urlCid, projectId: urlPid, meetingId: urlMid } = useParams();
+  const { 
+    companyId, 
+    projectId, 
+    activeMeetingId, 
+    transcript, 
+    ambiguities, 
+    resolved,
+    setNavContext,
+    setActiveMeeting
+  } = useSessionStore();
+
   const [activeTab, setActiveTab] = useState("summary");
 
   // Digital Replicant Interactive Chat State
@@ -40,22 +51,41 @@ export default function ReportPage() {
   const [inputMsg, setInputMsg] = useState("");
   const [isTyping, setIsTyping] = useState(false);
 
-  // Pre-populate chat history from cloud cache upon loading view
+  // Deep-Sync Hydration: Pull full historical context if missing or on refresh
   useEffect(() => {
-    const fetchSavedChat = async () => {
-      if (companyId && projectId && activeMeetingId) {
+    const hydrateReport = async () => {
+      const cid = urlCid || companyId;
+      const pid = urlPid || projectId;
+      const mid = urlMid || activeMeetingId;
+
+      if (cid && pid && mid) {
         try {
-          const snap = await getDoc(doc(db, "companies", companyId, "projects", projectId, "meetings", activeMeetingId));
-          if (snap.exists() && snap.data().chatHistory?.length > 0) {
-            setChatHistory(snap.data().chatHistory);
+          // Sync store with URL if they differ (e.g. on direct link or refresh)
+          if (cid !== companyId || pid !== projectId) setNavContext(cid, pid);
+          if (mid !== activeMeetingId) setActiveMeeting(mid, "Historical Session");
+
+          const snap = await getDoc(doc(db, "companies", cid, "projects", pid, "meetings", mid));
+          if (snap.exists()) {
+            const data = snap.data();
+            
+            // Hydrate chat history
+            if (data.chatHistory?.length > 0) setChatHistory(data.chatHistory);
+            
+            // Hydrate main session store for historical view
+            useSessionStore.setState({
+              report: data.report || null,
+              transcript: data.transcript || [],
+              ambiguities: data.ambiguities || [],
+              resolved: data.resolved || []
+            });
           }
         } catch(e) {
-          console.error("Failed to preload cloud chat history:", e);
+          console.error("Failed to hydrate boardroom report:", e);
         }
       }
     };
-    fetchSavedChat();
-  }, [companyId, projectId, activeMeetingId]);
+    hydrateReport();
+  }, [urlCid, urlPid, urlMid, companyId, projectId, activeMeetingId]);
 
   const syncChatToFirestore = async (historyPayload) => {
     if (companyId && projectId && activeMeetingId) {
