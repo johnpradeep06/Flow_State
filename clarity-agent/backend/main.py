@@ -129,8 +129,20 @@ async def global_exception_handler(request: Request, exc: Exception):
 
 # ── Stop a session ────────────────────────────────────────────────
 @app.post("/session/stop")
-async def stop_session():
-    global active_bot_id, analysis_task
+async def stop_session(background_tasks: BackgroundTasks):
+    global active_bot_id, analysis_task, all_flags, resolved_quotes
+    
+    # 🚀 Trigger Stage 2: Boardroom Analytical Synthesis
+    full_transcript = buffer.get_full_transcript()
+    background_tasks.add_task(
+        session_director, 
+        full_transcript, 
+        list(all_flags), 
+        set(resolved_quotes), 
+        manager
+    )
+    print("📢 Boardroom Analytical Swarm triggered in background.")
+
     if active_bot_id:
         try:
             await leave_meeting(active_bot_id)
