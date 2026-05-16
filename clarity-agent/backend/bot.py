@@ -1,17 +1,11 @@
-import httpx, os, sys
-if os.path.exists("D:\\python-libs"):
-    sys.path.insert(0, "D:\\python-libs")
-import omium
+import httpx, os
 from dotenv import load_dotenv
 load_dotenv()
 
-RECALL_KEY = (os.getenv("RECALL_API_KEY") or "").strip()
-RECALL_REGION = (os.getenv("RECALL_REGION") or "us-west-2").strip()
-if not RECALL_REGION:
-    RECALL_REGION = "us-west-2"
+RECALL_KEY = os.getenv("RECALL_API_KEY")
+RECALL_REGION = os.getenv("RECALL_REGION", "us-west-2").strip()
 BASE = f"https://{RECALL_REGION}.recall.ai/api/v1"
 
-@omium.trace()
 async def join_meeting(meet_url: str, webhook_url: str) -> str:
     """Send a bot to a Google Meet. Returns bot_id."""
     async with httpx.AsyncClient() as client:
@@ -44,7 +38,6 @@ async def join_meeting(meet_url: str, webhook_url: str) -> str:
             raise Exception(f"Recall API Error: {res.status_code} - {res.text}")
     return res.json()["id"]
 
-@omium.trace()
 async def leave_meeting(bot_id: str):
     async with httpx.AsyncClient() as client:
         await client.post(

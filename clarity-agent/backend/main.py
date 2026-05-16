@@ -1,9 +1,5 @@
-import asyncio, json, os, sys
-# Resolve custom library path only if running on local environment with disk constraints
-if os.path.exists("D:\\python-libs"):
-    sys.path.insert(0, "D:\\python-libs")
-import omium
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request, BackgroundTasks, HTTPException, JSONResponse
+import asyncio, json, os
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request, BackgroundTasks, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from agno.agent import Agent
@@ -45,7 +41,6 @@ async def websocket_endpoint(ws: WebSocket):
 
 # ── Recall.ai sends transcripts here ─────────────────────────────
 @app.post("/webhook/transcript")
-@omium.trace()
 async def transcript_webhook(request: Request):
     body = await request.json()
     print("WEBHOOK RECEIVED:", json.dumps(body, indent=2))
@@ -75,30 +70,15 @@ async def transcript_webhook(request: Request):
         await manager.broadcast("transcript", {"speaker": speaker, "text": text})
     return {"ok": True}
 
-@app.exception_handler(Exception)
-async def global_exception_handler(request: Request, exc: Exception):
-    print(f"🔥 GLOBAL ERROR: {str(exc)}")
-    return JSONResponse(
-        status_code=500,
-        content={"detail": str(exc), "type": type(exc).__name__}
-    )
-
 # ── Start a session ───────────────────────────────────────────────
 @app.post("/session/start")
-@omium.trace()
 async def start_session(request: Request):
     global active_bot_id, analysis_task, customer_name, all_flags, resolved_quotes
-    try:
-        body = await request.json()
-    except Exception:
-        raise HTTPException(status_code=400, detail="Invalid JSON body")
-        
-    meet_url = body.get("meet_url")
-    webhook_url = body.get("webhook_url", "").strip()
-    customer_name = body.get("customer_name", "Customer").strip()
+    body = await request.json()
+    meet_url = body["meet_url"]
     
-    if not meet_url:
-        raise HTTPException(status_code=400, detail="Missing meet_url")
+    # Update orchestration config and wipe old session logs
+    customer_name = body.get("customer_name", "Customer")
     all_flags.clear()
     resolved_quotes.clear()
     buffer.all_entries.clear()
@@ -139,7 +119,6 @@ async def health_check():
 
 # ── Stop a session ────────────────────────────────────────────────
 @app.post("/session/stop")
-@omium.trace()
 async def stop_session():
     global active_bot_id, analysis_task
     if active_bot_id:
@@ -158,7 +137,6 @@ async def stop_session():
     return {"ok": True}
 # ── Resolve ambiguity from frontend ──────────────────────────────
 @app.post("/session/resolve")
-@omium.trace()
 async def resolve_ambiguity(request: Request):
     global resolved_quotes
     body = await request.json()
@@ -170,7 +148,6 @@ async def resolve_ambiguity(request: Request):
 
 # ── Interactive Client Replicant Chat Sandbox ─────────────────────
 @app.post("/session/persona/chat")
-@omium.trace()
 async def chat_with_persona(request: Request):
     body = await request.json()
     message = body.get("message", "")
@@ -245,7 +222,6 @@ async def stop_session(background_tasks: BackgroundTasks):
     return {"ok": True}
 
 # ── Ambiguity detection loop (runs every 15 seconds) ─────────────
-@omium.trace()
 async def analysis_loop():
     global all_flags
     seen_quotes = set()

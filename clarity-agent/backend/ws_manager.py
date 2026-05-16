@@ -1,8 +1,5 @@
 from fastapi import WebSocket
-import json, sys, os
-if os.path.exists("D:\\python-libs"):
-    sys.path.insert(0, "D:\\python-libs")
-import omium
+import json
 
 class ConnectionManager:
     def __init__(self):
@@ -17,7 +14,6 @@ class ConnectionManager:
         if ws in self.active:
             self.active.remove(ws)
 
-    @omium.trace()
     async def broadcast(self, event_type: str, data: dict):
         payload = json.dumps({"type": event_type, "data": data})
         print(f"WS BROADCASTING: {event_type} to {len(self.active)} clients")
