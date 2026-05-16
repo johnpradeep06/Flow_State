@@ -63,7 +63,7 @@ export default function LoginPage() {
 
         {/* Branding Typography */}
         <h1 className="text-3xl font-black tracking-tight leading-none bg-gradient-to-b from-white via-white to-slate-500 bg-clip-text text-transparent text-center mb-2">
-          ClarityOS Enterprise
+          Agent Flow Enterprise
         </h1>
         <p className="text-slate-500 text-[11px] uppercase tracking-[0.25em] font-bold mb-8 flex items-center gap-2">
           <Globe size={10} className="text-slate-600" /> 

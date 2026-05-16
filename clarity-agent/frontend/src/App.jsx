@@ -113,7 +113,7 @@ function Dashboard() {
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-xl font-black tracking-tight bg-gradient-to-r from-white to-gray-400 bg-clip-text text-transparent leading-tight">
-              ClarityOS
+              Agent Flow
             </h1>
             <span className="text-[9px] font-black tracking-widest uppercase bg-white/5 border border-white/10 text-indigo-300 px-1.5 py-0.5 rounded">
               WORKSPACE v2.0

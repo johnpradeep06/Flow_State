@@ -1,13 +1,13 @@
-# 🛰️ ClarityOS: The Autonomous Meeting Swarm
+# 🛰️ Agent Flow: The Autonomous Meeting Swarm
 > **Eliminating Ambiguity. Shipping Clarity. End-to-End.**
 
-ClarityOS is a high-fidelity, autonomous multi-agent platform designed to audit live corporate meetings, neutralize ambiguity in real-time, and generate actionable, high-grade analytical reports without human intervention.
+Agent Flow is a high-fidelity, autonomous multi-agent platform designed to audit live corporate meetings, neutralize ambiguity in real-time, and generate actionable, high-grade analytical reports without human intervention.
 
 ---
 
 ## 🏛️ System Architecture
 
-ClarityOS operates on a **Distributed Agentic Architecture**, leveraging a multi-agent swarm to process live audio streams and synthesize complex requirements.
+Agent Flow operates on a **Distributed Agentic Architecture**, leveraging a multi-agent swarm to process live audio streams and synthesize complex requirements.
 
 ### 1. The Live Swarm (Real-time Audit)
 Powered by **Agno (formerly Phidata)**, the live swarm consists of three specialized agents working in a short-circuit pipeline:
@@ -37,7 +37,7 @@ After a session concludes, the **Session Director** agent takes over to perform 
 
 ## 🚀 Deployment & Environment
 
-ClarityOS is optimized for **Zero-Configuration Deployment** using a "No-Ngrok" architecture.
+Agent Flow is optimized for **Zero-Configuration Deployment** using a "No-Ngrok" architecture.
 
 ### Backend (Railway)
 The backend autonomously resolves its own callback URLs for Recall.ai webhooks.
@@ -95,6 +95,6 @@ Integrated with **Omium**, providing a "Trace Hub" where users can see the swarm
 ---
 
 ## ⚖️ License
-ClarityOS is proprietary software built for the [Hackathon Name] competition. 
+Agent Flow is proprietary software built for the [Hackathon Name] competition. 
 
 **Developed by John Pradeep.**

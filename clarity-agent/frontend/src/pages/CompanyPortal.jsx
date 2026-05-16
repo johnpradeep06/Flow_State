@@ -92,7 +92,7 @@ export default function CompanyPortal() {
             </div>
             <div>
               <h1 className="text-2xl font-black tracking-tight bg-gradient-to-r from-white to-slate-400 bg-clip-text text-transparent leading-tight">
-                ClarityOS Workspaces
+                Agent Flow Workspaces
               </h1>
               <p className="text-[10px] tracking-[0.15em] uppercase text-slate-500 font-bold mt-1">
                 Root Environment Matrix
@@ -204,7 +204,7 @@ export default function CompanyPortal() {
         </main>
 
         <footer className="mt-20 py-6 border-t border-white/[0.03] text-center z-10">
-          <p className="text-[9px] tracking-[0.2em] font-bold uppercase text-slate-700 font-mono">ClarityOS Central Intelligence Persistence Protocol</p>
+          <p className="text-[9px] tracking-[0.2em] font-bold uppercase text-slate-700 font-mono">Agent Flow Central Intelligence Persistence Protocol</p>
         </footer>
       </div>
 

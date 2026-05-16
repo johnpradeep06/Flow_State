@@ -117,7 +117,7 @@ from fastapi.responses import JSONResponse
 
 @app.get("/")
 async def health_check():
-    return {"status": "ClarityOS Swarm Engine Online", "environment": "Production"}
+    return {"status": "Agent Flow Swarm Engine Online", "environment": "Production"}
 
 @app.exception_handler(Exception)
 async def global_exception_handler(request: Request, exc: Exception):

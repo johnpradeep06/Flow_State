@@ -4,16 +4,16 @@ import { useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { db } from "../firebase";
 import { doc, getDoc, updateDoc } from "firebase/firestore";
-import { 
-  ChevronLeft, 
-  FileText, 
-  CheckCircle2, 
-  Calendar, 
-  Clock, 
-  TrendingUp, 
-  Award, 
-  Layers, 
-  Zap, 
+import {
+  ChevronLeft,
+  FileText,
+  CheckCircle2,
+  Calendar,
+  Clock,
+  TrendingUp,
+  Award,
+  Layers,
+  Zap,
   ShieldCheck,
   Loader2,
   UserRound,
@@ -31,12 +31,12 @@ export default function ReportPage() {
   const navigate = useNavigate();
   const report = useSessionStore((s) => s.report);
   const { companyId: urlCid, projectId: urlPid, meetingId: urlMid } = useParams();
-  const { 
-    companyId, 
-    projectId, 
-    activeMeetingId, 
-    transcript, 
-    ambiguities, 
+  const {
+    companyId,
+    projectId,
+    activeMeetingId,
+    transcript,
+    ambiguities,
     resolved,
     setNavContext,
     setActiveMeeting
@@ -67,10 +67,10 @@ export default function ReportPage() {
           const snap = await getDoc(doc(db, "companies", cid, "projects", pid, "meetings", mid));
           if (snap.exists()) {
             const data = snap.data();
-            
+
             // Hydrate chat history
             if (data.chatHistory?.length > 0) setChatHistory(data.chatHistory);
-            
+
             // Hydrate main session store for historical view
             useSessionStore.setState({
               report: data.report || null,
@@ -79,7 +79,7 @@ export default function ReportPage() {
               resolved: data.resolved || []
             });
           }
-        } catch(e) {
+        } catch (e) {
           console.error("Failed to hydrate boardroom report:", e);
         }
       }
@@ -100,14 +100,14 @@ export default function ReportPage() {
 
   const handleSendChat = async () => {
     if (!inputMsg.trim() || !report?.persona) return;
-    
+
     const payloadMsg = inputMsg;
     setInputMsg("");
     const userHistory = [...chatHistory, { role: "user", text: payloadMsg }];
     setChatHistory(userHistory);
     syncChatToFirestore(userHistory);
     setIsTyping(true);
-    
+
     try {
       const res = await fetch("http://localhost:8000/session/persona/chat", {
         method: "POST",
@@ -169,7 +169,7 @@ export default function ReportPage() {
       <div className="min-h-screen flex flex-col bg-obsidian text-white p-6 md:p-12 select-none relative overflow-hidden selection:bg-indigo-500/30 font-sans">
         {/* Dynamic Premium Mesh Gradient Backgrounds */}
         <div className="absolute top-[-20%] left-[50%] translate-x-[-50%] w-[800px] h-[400px] bg-gradient-to-b from-indigo-500/10 via-purple-500/5 to-transparent blur-[120px] rounded-full pointer-events-none"></div>
-        
+
         <header className="max-w-5xl mx-auto w-full mb-10 flex items-center justify-between z-10 relative">
           <div className="flex items-center gap-2 bg-white/[0.03] border border-white/5 px-3 py-1 rounded-full backdrop-blur-md shadow-lg">
             <Cpu size={12} className="text-purple-400 animate-pulse" />
@@ -178,7 +178,7 @@ export default function ReportPage() {
         </header>
 
         <main className="max-w-4xl mx-auto w-full flex-1 flex flex-col justify-center z-10 relative pb-16">
-          
+
           <div className="mb-10 text-left">
             <h1 className="text-4xl font-black tracking-tight bg-gradient-to-r from-white via-white to-white/40 bg-clip-text text-transparent leading-tight mb-3">
               Assembling Requirements
@@ -197,31 +197,29 @@ export default function ReportPage() {
               const IconComp = ag.icon;
 
               return (
-                <motion.div 
+                <motion.div
                   key={ag.id}
                   initial={{ opacity: 0, y: 15 }}
                   animate={{ opacity: 1, y: 0 }}
                   transition={{ duration: 0.5, delay: idx * 0.08 }}
-                  className={`p-5 rounded-3xl border backdrop-blur-xl shadow-xl flex gap-4 relative overflow-hidden transition-all duration-500 ${
-                    isActive 
-                      ? "bg-indigo-500/[0.03] border-indigo-500/30 shadow-[0_0_40px_rgba(99,102,241,0.03)] scale-[1.01]" 
+                  className={`p-5 rounded-3xl border backdrop-blur-xl shadow-xl flex gap-4 relative overflow-hidden transition-all duration-500 ${isActive
+                      ? "bg-indigo-500/[0.03] border-indigo-500/30 shadow-[0_0_40px_rgba(99,102,241,0.03)] scale-[1.01]"
                       : isDone
-                      ? "bg-emerald-500/[0.01] border-emerald-500/20 shadow-none"
-                      : "bg-white/[0.01] border-white/[0.06]"
-                  }`}
+                        ? "bg-emerald-500/[0.01] border-emerald-500/20 shadow-none"
+                        : "bg-white/[0.01] border-white/[0.06]"
+                    }`}
                 >
                   {/* Glowing track indicator */}
                   {isActive && (
                     <div className="absolute inset-y-0 left-0 w-[3px] bg-indigo-500 rounded-full animate-pulse"></div>
                   )}
-                  
-                  <div className={`w-11 h-11 rounded-2xl border flex items-center justify-center shrink-0 transition-all duration-500 ${
-                    isActive 
-                      ? "bg-indigo-500/10 border-indigo-500/20 text-indigo-400 shadow-[0_0_15px_rgba(99,102,241,0.2)]" 
-                      : isDone 
-                      ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400" 
-                      : "bg-white/[0.03] border-white/[0.06] text-gray-500"
-                  }`}>
+
+                  <div className={`w-11 h-11 rounded-2xl border flex items-center justify-center shrink-0 transition-all duration-500 ${isActive
+                      ? "bg-indigo-500/10 border-indigo-500/20 text-indigo-400 shadow-[0_0_15px_rgba(99,102,241,0.2)]"
+                      : isDone
+                        ? "bg-emerald-500/10 border-emerald-500/20 text-emerald-400"
+                        : "bg-white/[0.03] border-white/[0.06] text-gray-500"
+                    }`}>
                     {isDone ? (
                       <CheckCircle2 size={20} className="animate-in zoom-in-75 duration-300" />
                     ) : isActive ? (
@@ -236,20 +234,19 @@ export default function ReportPage() {
                       <h3 className={`font-bold text-[14px] tracking-wide ${isDone ? "text-gray-300" : "text-white"}`}>
                         {ag.title}
                       </h3>
-                      <span className={`text-[9px] font-mono uppercase tracking-widest px-2 py-0.5 rounded-md border font-bold ${
-                        isDone 
-                          ? "bg-emerald-500/5 text-emerald-400 border-emerald-500/10" 
-                          : isActive 
-                          ? "bg-indigo-500/10 text-indigo-400 border-indigo-500/20 animate-pulse" 
-                          : "bg-white/5 text-gray-500 border-white/5"
-                      }`}>
+                      <span className={`text-[9px] font-mono uppercase tracking-widest px-2 py-0.5 rounded-md border font-bold ${isDone
+                          ? "bg-emerald-500/5 text-emerald-400 border-emerald-500/10"
+                          : isActive
+                            ? "bg-indigo-500/10 text-indigo-400 border-indigo-500/20 animate-pulse"
+                            : "bg-white/5 text-gray-500 border-white/5"
+                        }`}>
                         {isDone ? "RESOLVED" : isActive ? "RESEARCHING" : "QUEUED"}
                       </span>
                     </div>
                     <p className="text-xs text-gray-500 leading-relaxed mb-3">
                       {ag.desc}
                     </p>
-                    
+
                     {/* Micro Console */}
                     <div className="flex items-center gap-2 text-[10px] font-mono truncate bg-obsidian border border-white/[0.04] rounded-xl px-3 py-2 text-gray-400 shadow-inner">
                       <Terminal size={11} className={`shrink-0 ${isActive ? "text-indigo-400 animate-pulse" : isDone ? "text-emerald-400" : "text-gray-600"}`} />
@@ -263,7 +260,7 @@ export default function ReportPage() {
             })}
           </div>
 
-          <button 
+          <button
             onClick={() => navigate(`/c/${companyId}/p/${projectId}/live`)}
             className="mt-12 text-xs text-gray-500 hover:text-slate-300 font-medium transition-colors flex items-center gap-1.5 mx-auto bg-white/[0.02] border border-white/[0.05] px-4 py-2 rounded-full backdrop-blur hover:bg-white/[0.04]"
           >
@@ -278,7 +275,7 @@ export default function ReportPage() {
   const { clarity, requirements, summary } = report;
 
   return (
-    <motion.div 
+    <motion.div
       initial={{ opacity: 0 }}
       animate={{ opacity: 1 }}
       transition={{ duration: 0.6 }}
@@ -323,68 +320,63 @@ export default function ReportPage() {
       <nav className="flex gap-1.5 bg-surface/50 backdrop-blur border border-white/5 p-1 rounded-xl mb-8 max-w-xl">
         <button
           onClick={() => setActiveTab("summary")}
-          className={`flex-1 flex items-center justify-center gap-2 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all duration-200 ${
-            activeTab === "summary"
+          className={`flex-1 flex items-center justify-center gap-2 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all duration-200 ${activeTab === "summary"
               ? "bg-surface text-white shadow-lg border border-white/10"
               : "text-gray-400 hover:text-white hover:bg-white/5"
-          }`}
+            }`}
         >
           <FileText size={15} />
           Summary
         </button>
         <button
           onClick={() => setActiveTab("transcript")}
-          className={`flex-1 flex items-center justify-center gap-2 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all duration-200 ${
-            activeTab === "transcript"
+          className={`flex-1 flex items-center justify-center gap-2 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all duration-200 ${activeTab === "transcript"
               ? "bg-surface text-white shadow-lg border border-white/10"
               : "text-gray-400 hover:text-white hover:bg-white/5"
-          }`}
+            }`}
         >
           <MessageSquareText size={15} className="text-sky-400" />
           Logs
         </button>
         <button
           onClick={() => setActiveTab("specs")}
-          className={`flex-1 flex items-center justify-center gap-2 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all duration-200 ${
-            activeTab === "specs"
+          className={`flex-1 flex items-center justify-center gap-2 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all duration-200 ${activeTab === "specs"
               ? "bg-surface text-white shadow-lg border border-white/10"
               : "text-gray-400 hover:text-white hover:bg-white/5"
-          }`}
+            }`}
         >
           <Layers size={15} />
           PRD Specs
         </button>
         <button
           onClick={() => setActiveTab("clarity")}
-          className={`flex-1 flex items-center justify-center gap-2 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all duration-200 ${
-            activeTab === "clarity"
+          className={`flex-1 flex items-center justify-center gap-2 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all duration-200 ${activeTab === "clarity"
               ? "bg-surface text-white shadow-lg border border-white/10"
               : "text-gray-400 hover:text-white hover:bg-white/5"
-          }`}
+            }`}
         >
           <TrendingUp size={15} />
           Clarity
         </button>
         <button
           onClick={() => setActiveTab("replicant")}
-          className={`flex-1 flex items-center justify-center gap-2 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all duration-200 ${
-            activeTab === "replicant"
+          className={`flex-1 flex items-center justify-center gap-2 py-2 text-xs sm:text-sm font-semibold rounded-lg transition-all duration-200 ${activeTab === "replicant"
               ? "bg-surface text-white shadow-lg border border-white/10"
               : "text-gray-400 hover:text-white hover:bg-white/5"
-          }`}
+            }`}
         >
           <Sparkles size={15} className="text-purple-400" />
-          Clone Sandbox
+          User's Profile
         </button>
       </nav>
 
       {/* MAIN CONTENT ACCORDING TO TAB */}
       <main className="flex-1 relative min-h-[60vh]">
         <AnimatePresence mode="wait">
-          
+
           {/* TAB 1: EXECUTIVE SUMMARY */}
           {activeTab === "summary" && (
-            <motion.div 
+            <motion.div
               key="summary"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
@@ -461,7 +453,7 @@ export default function ReportPage() {
 
           {/* TAB 2: TECHNICAL SPECIFICATIONS */}
           {activeTab === "specs" && (
-            <motion.div 
+            <motion.div
               key="specs"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
@@ -521,7 +513,7 @@ export default function ReportPage() {
 
           {/* TAB 3: CLARITY ASSESSMENT */}
           {activeTab === "clarity" && (
-            <motion.div 
+            <motion.div
               key="clarity"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
@@ -534,13 +526,13 @@ export default function ReportPage() {
                 <section className="bg-white/[0.01] border border-white/[0.06] rounded-3xl p-8 shadow-[0_8px_30px_rgba(0,0,0,0.12)] backdrop-blur-md col-span-1 flex flex-col items-center justify-center text-center relative overflow-hidden">
                   <div className="absolute inset-0 bg-gradient-to-b from-emerald-500/[0.03] to-transparent pointer-events-none"></div>
                   <h2 className="text-slate-400 text-[10px] font-bold uppercase tracking-[0.15em] mb-6">Total Clarity Grade</h2>
-                  
+
                   {/* Radial Progress */}
                   <div className="relative w-36 h-36 flex items-center justify-center mb-6 scale-105">
                     <svg className="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
                       <circle cx="50" cy="50" r="42" className="stroke-white/[0.03] fill-none" strokeWidth="7" />
-                      <circle 
-                        cx="50" cy="50" r="42" 
+                      <circle
+                        cx="50" cy="50" r="42"
                         className="stroke-emerald-500 fill-none transition-all duration-1000 ease-out"
                         strokeWidth="7"
                         strokeDasharray={`${2 * Math.PI * 42}`}
@@ -601,16 +593,16 @@ export default function ReportPage() {
                         <div className="text-slate-400 text-xs font-bold uppercase tracking-wider">Precision Density</div>
                       </div>
                       <div className="w-32 h-1.5 bg-white/[0.04] rounded-full overflow-hidden mt-3 shadow-inner">
-                        <motion.div 
+                        <motion.div
                           initial={{ width: 0 }}
                           animate={{ width: `${Math.min(clarity.stats.metric_density_pct * 10, 100)}%` }}
                           transition={{ duration: 1 }}
-                          className="h-full bg-emerald-500 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.5)]" 
+                          className="h-full bg-emerald-500 rounded-full shadow-[0_0_8px_rgba(16,185,129,0.5)]"
                         />
                       </div>
                     </div>
                     <p className="text-[11px] text-slate-500 mt-5 leading-relaxed">
-                      Frequency of currency tokens ($), numeric figures, due-dates, and percentages relative to the total word output. 
+                      Frequency of currency tokens ($), numeric figures, due-dates, and percentages relative to the total word output.
                       Elite targets achieve &gt;2.5% density.
                     </p>
                   </div>
@@ -619,8 +611,8 @@ export default function ReportPage() {
 
               {/* Evaluation Context Footer */}
               <div className="p-4 bg-white/[0.02] border border-white/[0.04] rounded-2xl text-[11px] text-slate-500 leading-relaxed font-mono tracking-wide">
-                <strong className="text-slate-400 font-bold uppercase tracking-wider font-sans mr-1">Methodology Note:</strong> 
-                This quantitative grade is mathematically tabulated by balancing total tags, verified resolution timelines, 
+                <strong className="text-slate-400 font-bold uppercase tracking-wider font-sans mr-1">Methodology Note:</strong>
+                This quantitative grade is mathematically tabulated by balancing total tags, verified resolution timelines,
                 and total numeric context depth, penalized negatively for outstanding ambiguity debt.
               </div>
             </motion.div>
@@ -628,7 +620,7 @@ export default function ReportPage() {
 
           {/* TAB 4: CLIENT REPLICANT CHAT SANDBOX */}
           {activeTab === "replicant" && (
-            <motion.div 
+            <motion.div
               key="replicant"
               initial={{ opacity: 0, y: 12 }}
               animate={{ opacity: 1, y: 0 }}
@@ -636,7 +628,7 @@ export default function ReportPage() {
               transition={{ duration: 0.25 }}
               className="grid grid-cols-1 lg:grid-cols-3 gap-6 min-h-[60vh]"
             >
-              
+
               {/* Left Side: The Client DNA Card */}
               <aside className="bg-white/[0.01] border border-white/[0.06] rounded-3xl p-6 shadow-[0_8px_30px_rgba(0,0,0,0.12)] backdrop-blur-md lg:col-span-1 flex flex-col h-fit relative group hover:border-white/[0.09] transition-colors">
                 <div className="flex items-center gap-3 pb-4 border-b border-white/[0.04] mb-6">
@@ -654,7 +646,7 @@ export default function ReportPage() {
                     {report.persona?.name || "Client"}
                   </h3>
                   <p className="text-xs text-slate-400 flex items-center gap-1.5">
-                    <UserRound size={12} className="text-slate-500 shrink-0" /> 
+                    <UserRound size={12} className="text-slate-500 shrink-0" />
                     <span className="truncate font-medium">{report.persona?.role_title || "Customer"} @ {report.persona?.company || "The Project"}</span>
                   </p>
                   <div className="flex gap-2 mt-3 flex-wrap">
@@ -731,11 +723,10 @@ export default function ReportPage() {
                 <div className="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar bg-gradient-to-b from-black/5 to-black/10">
                   {chatHistory.map((msg, i) => (
                     <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                      <div className={`max-w-[85%] rounded-2xl p-4 shadow-[0_4px_20px_rgba(0,0,0,0.08)] text-[13px] sm:text-sm leading-relaxed flex items-start gap-3 ${
-                        msg.role === 'user' 
+                      <div className={`max-w-[85%] rounded-2xl p-4 shadow-[0_4px_20px_rgba(0,0,0,0.08)] text-[13px] sm:text-sm leading-relaxed flex items-start gap-3 ${msg.role === 'user'
                           ? 'bg-indigo-600 text-white border border-indigo-500/20 rounded-br-sm font-medium'
                           : 'bg-white/[0.02] border border-white/[0.05] text-slate-200 rounded-bl-sm'
-                      }`}>
+                        }`}>
                         {msg.role === 'bot' && (
                           <div className="w-6 h-6 rounded-full bg-purple-500/10 border border-purple-500/30 flex items-center justify-center text-purple-300 shrink-0 mt-0.5">
                             <Brain size={13} />
@@ -747,7 +738,7 @@ export default function ReportPage() {
                       </div>
                     </div>
                   ))}
-                  
+
                   {/* Typing Loader */}
                   {isTyping && (
                     <div className="flex justify-start animate-pulse">
@@ -763,11 +754,11 @@ export default function ReportPage() {
 
                 {/* Fixed Input Bar Footer */}
                 <div className="p-4 bg-black/10 border-t border-white/[0.04]">
-                  <form 
+                  <form
                     onSubmit={(e) => { e.preventDefault(); handleSendChat(); }}
                     className="flex gap-2 items-center bg-white/[0.02] border border-white/[0.06] rounded-xl p-1.5 focus-within:border-purple-500/30 focus-within:bg-white/[0.03] transition-all shadow-inner"
                   >
-                    <input 
+                    <input
                       type="text"
                       value={inputMsg}
                       onChange={(e) => setInputMsg(e.target.value)}
@@ -810,7 +801,7 @@ export default function ReportPage() {
                     {transcript?.length || 0} Entries Recorded
                   </span>
                 </div>
-                
+
                 <div className="flex-1 overflow-y-auto p-6 space-y-4 custom-scrollbar">
                   {(!transcript || transcript.length === 0) ? (
                     <div className="h-64 flex flex-col items-center justify-center text-center opacity-50">
@@ -834,7 +825,7 @@ export default function ReportPage() {
 
               {/* Right Side: Detailed Flags Archive */}
               <section className="lg:col-span-1 flex flex-col h-full space-y-6">
-                
+
                 {/* 1. Active Ambiguity Flags */}
                 <div className="flex-1 bg-surface border border-white/5 rounded-3xl p-5 flex flex-col overflow-hidden relative shadow-lg">
                   <div className="flex items-center justify-between mb-4 pb-2 border-b border-white/[0.04]">
@@ -845,7 +836,7 @@ export default function ReportPage() {
                       {ambiguities?.length || 0}
                     </span>
                   </div>
-                  
+
                   <div className="flex-1 overflow-y-auto space-y-3 custom-scrollbar pr-1">
                     {(!ambiguities || ambiguities.length === 0) ? (
                       <p className="text-xs text-slate-500 text-center py-8 italic">No active flags pending.</p>
@@ -872,7 +863,7 @@ export default function ReportPage() {
                       {resolved?.length || 0}
                     </span>
                   </div>
-                  
+
                   <div className="flex-1 overflow-y-auto space-y-3 custom-scrollbar pr-1">
                     {(!resolved || resolved.length === 0) ? (
                       <p className="text-xs text-slate-500 text-center py-8 italic">No metrics cleared during call.</p>
@@ -907,9 +898,9 @@ export default function ReportPage() {
 // Missing Icon Import Helper
 function AlertCircle({ size }) {
   return (
-    <svg 
-      xmlns="http://www.w3.org/2000/svg" width={size} height={size} 
-      viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" 
+    <svg
+      xmlns="http://www.w3.org/2000/svg" width={size} height={size}
+      viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"
       strokeLinecap="round" strokeLinejoin="round"
     >
       <circle cx="12" cy="12" r="10"></circle>
