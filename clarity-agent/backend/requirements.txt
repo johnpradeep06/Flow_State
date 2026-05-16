@@ -7,3 +7,4 @@ pydantic==2.13.4
 pyngrok==8.1.2
 agno>=1.4.0
 omium
+google-genai
