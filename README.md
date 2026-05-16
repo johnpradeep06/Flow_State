@@ -1,107 +1,100 @@
-# Clarity Agent
+# 🛰️ ClarityOS: The Autonomous Meeting Swarm
+> **Eliminating Ambiguity. Shipping Clarity. End-to-End.**
 
-Clarity Agent is an AI-powered real-time meeting assistant designed to join Google Meet calls, transcribe conversations, and instantly detect ambiguous or vague statements so you can clarify them before the meeting ends.
-
-## Architecture
-
-The project consists of two main components:
-1. **Backend (FastAPI)**: Manages meeting bot deployments, receives live webhooks from Recall.ai, and runs real-time analysis using the Gemini 3.1 Flash LLM.
-2. **Frontend (React)**: A real-time dashboard that connects via WebSockets to display live captions and instant ambiguity alert cards.
-
-## Features
-- **Bot Deployment**: Automatically send a recording bot to Google Meet links.
-- **Live Captions**: WebSockets push transcripts instantly to the UI.
-- **Ambiguity Detection**: AI background loop analyzes dialogue every 15 seconds to catch vague statements (e.g., missing metrics, undefined requirements).
-
-## Getting Started
-
-### Prerequisites
-- Python 3.10+
-- Node.js & npm
-- [Recall.ai](https://www.recall.ai/) API Key
-- Gemini API Key
-
-### Backend Setup
-
-1. **Navigate to the backend directory:**
-   ```bash
-   cd clarity-agent/backend
-   ```
-
-2. **Create a virtual environment:**
-   This keeps your Python packages isolated.
-   ```bash
-   python -m venv .venv
-   ```
-
-3. **Activate the virtual environment:**
-   * **Windows (PowerShell):**
-     ```powershell
-     .\.venv\Scripts\Activate
-     ```
-   * **Mac/Linux:**
-     ```bash
-     source .venv/bin/activate
-     ```
-   *(You should see `(.venv)` appear in your terminal prompt)*
-
-4. **Install backend dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-5. **Set up your environment variables:**
-   Create a `.env` file in the `backend` folder and add your API keys:
-   ```env
-   RECALL_API_KEY=your_recall_key
-   GEMINI_API_KEY=your_gemini_key
-   ```
-
-6. **Run the FastAPI server:**
-   ```bash
-   uvicorn main:app --reload
-   ```
-   *The backend will start running at `http://localhost:8000`.*
+ClarityOS is a high-fidelity, autonomous multi-agent platform designed to audit live corporate meetings, neutralize ambiguity in real-time, and generate actionable, high-grade analytical reports without human intervention.
 
 ---
 
-### Frontend Setup
+## 🏛️ System Architecture
 
-1. **Open a new terminal window** (leave the backend running in the first one).
+ClarityOS operates on a **Distributed Agentic Architecture**, leveraging a multi-agent swarm to process live audio streams and synthesize complex requirements.
 
-2. **Navigate to the frontend directory:**
-   *(Assuming your frontend is in a folder named `frontend` or `ui`)*
-   ```bash
-   cd clarity-agent/frontend
-   ```
+### 1. The Live Swarm (Real-time Audit)
+Powered by **Agno (formerly Phidata)**, the live swarm consists of three specialized agents working in a short-circuit pipeline:
+*   **The Supervisor**: Orchestrates the live transcript stream, filtering noise and identifying "Ambiguity Windows."
+*   **The Analyst**: Performs deep-reasoning on specific dialogue segments to identify vague quality metrics, undefined references, or scope gaps.
+*   **The Critic**: Cross-references Analyst flags against the broader meeting context to ensure high-precision alerts and polite neutralization strategies.
 
-3. **Install Node dependencies:**
-   ```bash
-   npm install
-   ```
-
-4. **Start the React development server:**
-   ```bash
-   npm run dev
-   ```
-   *The frontend dashboard will start running (typically at `http://localhost:5173` or `3000`).*
+### 2. The Analytical Boardroom (Post-Meeting)
+After a session concludes, the **Session Director** agent takes over to perform a holistic synthesis:
+*   **Clarity Scoring**: Mathematically calculates a grade for the meeting based on the density of resolved vs. unresolved flags.
+*   **Customer DNA Profiling**: Reconstructs a psychological and technical profile of the stakeholders (Priorities, Worries, Preferences).
+*   **Digital Replicant Sandbox**: Generates a chatable simulation of the meeting persona for follow-up testing.
 
 ---
 
-## Local Webhook Testing with Ngrok
+## 🛠️ Technology Stack
 
-Because Recall.ai needs to send transcription data back to your server over the internet, you cannot use `localhost` for webhooks. You must expose your local port 8000 to the internet using **ngrok**.
+| Layer | Technologies |
+| :--- | :--- |
+| **Intelligence** | Gemini 1.5 Flash (Live), Gemini 1.5 Pro (Analytical), Agno Swarm Framework |
+| **Backend** | FastAPI, Uvicorn, Python 3.12, Omium Tracing |
+| **Frontend** | React, Vite, Tailwind CSS, Framer Motion, Zustand |
+| **Integrations** | Recall.ai (Video Bridge), Deepgram (Transcription), Firebase (Cloud Registry) |
+| **Infrastructure** | Railway (Backend), Vercel (Frontend) |
 
-1. **Install Ngrok** from [ngrok.com/download](https://ngrok.com/download).
-2. **Open a new terminal window** and run:
-   ```bash
-   ngrok http 8000
-   ```
-3. **Copy the Forwarding URL** from the terminal output (it will look something like `https://a1b2-c3d4.ngrok-free.app`).
-4. **Use this URL:** Update the hardcoded `webhook_url` in `backend/main.py` to match your new ngrok address, or pass it dynamically from your frontend when calling `/session/start`.
-   *Note: Free ngrok URLs change every time you restart ngrok.*
+---
 
-## Deployment Notes
-- **CORS origins** in `main.py` to match your frontend domain.
-- **Webhook Fallback URL** in `main.py` to your backend's public HTTPS URL.
-- Use `wss://` instead of `ws://` in your frontend WebSocket connection.
+## 🚀 Deployment & Environment
+
+ClarityOS is optimized for **Zero-Configuration Deployment** using a "No-Ngrok" architecture.
+
+### Backend (Railway)
+The backend autonomously resolves its own callback URLs for Recall.ai webhooks.
+
+**Required Variables:**
+*   `GEMINI_API_KEY`: Google AI Studio key.
+*   `RECALL_API_KEY`: Recall.ai API token.
+*   `RECALL_REGION`: (e.g., `us-west-2`) Points to your Recall account region.
+*   `PUBLIC_URL`: Set to `https://${{RAILWAY_PUBLIC_DOMAIN}}`.
+*   `OMIUM_API_KEY`: For AI observability and tracing.
+
+### Frontend (Vercel)
+The frontend connects to the production swarm via environment-aware protocol resolution.
+
+**Required Variables:**
+*   `VITE_API_BASE_URL`: Your Railway production URL.
+*   `VITE_FIREBASE_*`: Full set of Firebase configuration keys.
+
+---
+
+## 💻 Local Development
+
+### 1. Backend Setup
+```bash
+cd clarity-agent/backend
+python -m venv .venv
+source .venv/bin/activate  # or .\.venv\Scripts\activate on Windows
+pip install -r requirements.txt
+uvicorn main:app --reload
+```
+
+### 2. Frontend Setup
+```bash
+cd clarity-agent/frontend
+npm install
+npm run dev
+```
+
+---
+
+## 📊 Key Features & Workflows
+
+### Autonomous Join (Calendar Bridge)
+While the demo supports manual URL entry, the production architecture is designed to autonomously bridge with Google Calendar, provisioning bots for scheduled syncs without user oversight.
+
+### The Ambiguity Matrix
+Live alerts are streamed via WebSockets. Each alert contains:
+*   **The Quote**: The exact phrase that triggered the flag.
+*   **The Type**: (e.g., `vague_quality`, `missing_metric`).
+*   **Neutralization Strategy**: A polite, actionable question the user can ask right now to fix the ambiguity.
+
+### Real-time Agent Tracing
+Integrated with **Omium**, providing a "Trace Hub" where users can see the swarm's internal dialogue and reasoning process in real-time.
+
+---
+
+## ⚖️ License
+ClarityOS is proprietary software built for the [Hackathon Name] competition. 
+
+**Developed by John Pradeep.**
