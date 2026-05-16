@@ -1,6 +1,7 @@
 from fastapi import WebSocket
-import json, sys
-sys.path.insert(0, "D:\\python-libs")
+import json, sys, os
+if os.path.exists("D:\\python-libs"):
+    sys.path.insert(0, "D:\\python-libs")
 import omium
 
 class ConnectionManager:

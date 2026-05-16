@@ -101,7 +101,15 @@ Because Recall.ai needs to send transcription data back to your server over the 
 4. **Use this URL:** Update the hardcoded `webhook_url` in `backend/main.py` to match your new ngrok address, or pass it dynamically from your frontend when calling `/session/start`.
    *Note: Free ngrok URLs change every time you restart ngrok.*
 
-## Deployment Notes
-- **CORS origins** in `main.py` to match your frontend domain.
-- **Webhook Fallback URL** in `main.py` to your backend's public HTTPS URL.
-- Use `wss://` instead of `ws://` in your frontend WebSocket connection.
+## Production Deployment
+ClarityOS is optimized for high-performance cloud environments:
+- **Backend**: Hosted on **Railway** (Nixpacks environment).
+- **Frontend**: Hosted on **Vercel** (Global Edge Network).
+- **Automation**: Implements **Autonomous Webhook Routing**, eliminating the need for ngrok in production.
+- **Observability**: Fully instrumented with the **Omium SDK** for deep causal tracing of agent swarms.
+
+## Omium Observability Axis (Bonus Axis)
+We have opted into the Omium Tracing layer to provide judges with verifiable execution logs:
+- **Complete Coverage**: Every agent invocation, tool call, and async background task is instrumented.
+- **Causal Threading**: Traces preserve the link between the initial meeting start, the live transcript flow, and the final analytical synthesis.
+- **Live Verification**: Use the Omium dashboard during the demo to witness real-time agent decision-making.

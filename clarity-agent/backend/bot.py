@@ -1,11 +1,14 @@
 import httpx, os, sys
-sys.path.insert(0, "D:\\python-libs")
+if os.path.exists("D:\\python-libs"):
+    sys.path.insert(0, "D:\\python-libs")
 import omium
 from dotenv import load_dotenv
 load_dotenv()
 
-RECALL_KEY = os.getenv("RECALL_API_KEY")
-RECALL_REGION = os.getenv("RECALL_REGION", "us-west-2").strip()
+RECALL_KEY = (os.getenv("RECALL_API_KEY") or "").strip()
+RECALL_REGION = (os.getenv("RECALL_REGION") or "us-west-2").strip()
+if not RECALL_REGION:
+    RECALL_REGION = "us-west-2"
 BASE = f"https://{RECALL_REGION}.recall.ai/api/v1"
 
 @omium.trace()

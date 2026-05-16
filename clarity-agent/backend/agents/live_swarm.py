@@ -1,5 +1,6 @@
 import os, asyncio, sys
-sys.path.insert(0, "D:\\python-libs")
+if os.path.exists("D:\\python-libs"):
+    sys.path.insert(0, "D:\\python-libs")
 import omium
 from typing import List
 from pydantic import BaseModel, Field

@@ -1,8 +1,9 @@
 import asyncio, json, os, sys
-# Force resolution to secondary drive due to system disk exhaustion
-sys.path.insert(0, "D:\\python-libs")
+# Resolve custom library path only if running on local environment with disk constraints
+if os.path.exists("D:\\python-libs"):
+    sys.path.insert(0, "D:\\python-libs")
 import omium
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request, BackgroundTasks, HTTPException
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request, BackgroundTasks, HTTPException, JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from agno.agent import Agent
@@ -74,16 +75,30 @@ async def transcript_webhook(request: Request):
         await manager.broadcast("transcript", {"speaker": speaker, "text": text})
     return {"ok": True}
 
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    print(f"🔥 GLOBAL ERROR: {str(exc)}")
+    return JSONResponse(
+        status_code=500,
+        content={"detail": str(exc), "type": type(exc).__name__}
+    )
+
 # ── Start a session ───────────────────────────────────────────────
 @app.post("/session/start")
 @omium.trace()
 async def start_session(request: Request):
     global active_bot_id, analysis_task, customer_name, all_flags, resolved_quotes
-    body = await request.json()
-    meet_url = body["meet_url"]
+    try:
+        body = await request.json()
+    except Exception:
+        raise HTTPException(status_code=400, detail="Invalid JSON body")
+        
+    meet_url = body.get("meet_url")
+    webhook_url = body.get("webhook_url", "").strip()
+    customer_name = body.get("customer_name", "Customer").strip()
     
-    # Update orchestration config and wipe old session logs
-    customer_name = body.get("customer_name", "Customer")
+    if not meet_url:
+        raise HTTPException(status_code=400, detail="Missing meet_url")
     all_flags.clear()
     resolved_quotes.clear()
     buffer.all_entries.clear()
