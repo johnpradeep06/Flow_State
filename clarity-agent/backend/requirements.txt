@@ -5,3 +5,5 @@ httpx==0.28.1
 python-dotenv==1.2.2
 pydantic==2.13.4
 pyngrok==8.1.2
+agno>=1.4.0
+omium

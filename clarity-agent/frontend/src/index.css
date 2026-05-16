@@ -32,3 +32,47 @@
 .custom-scrollbar::-webkit-scrollbar-thumb:hover {
   @apply bg-white/20;
 }
+
+/* --- Production Grade Premium Overrides --- */
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+@keyframes pulseRing {
+  0% { transform: scale(0.95); opacity: 0.8; }
+  50% { transform: scale(1.15); opacity: 0.3; }
+  100% { transform: scale(0.95); opacity: 0.8; }
+}
+
+.animate-shimmer {
+  background: linear-gradient(90deg, #ffffff08 25%, #ffffff1c 50%, #ffffff08 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.5s infinite;
+}
+
+.pulse-ring {
+  animation: pulseRing 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+}
+
+.premium-glass {
+  @apply bg-surface/75 backdrop-blur-xl border border-white/10 shadow-[0_8px_32px_0_rgba(0,0,0,0.3)];
+}
+
+.text-gradient-glow {
+  @apply bg-clip-text text-transparent bg-gradient-to-r from-white via-white/90 to-white/40;
+}
+
+/* Liquid gradient ambient blurs for workspace corners */
+.ambient-mesh {
+  position: fixed;
+  top: 0; left: 0; right: 0; bottom: 0;
+  z-index: -1;
+  background-image: 
+    radial-gradient(at 0% 0%, rgba(99, 102, 241, 0.08) 0px, transparent 50%),
+    radial-gradient(at 100% 0%, rgba(244, 63, 94, 0.05) 0px, transparent 50%),
+    radial-gradient(at 50% 100%, rgba(16, 185, 129, 0.04) 0px, transparent 50%);
+  pointer-events: none;
+}
+

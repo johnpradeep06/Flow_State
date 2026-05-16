@@ -1,29 +1,48 @@
-import { useEffect, useRef } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 export default function TranscriptFeed({ transcript }) {
-  // Only keep the last 6 items for live captions
+  // We display the last 6 items for a cleaner real-time caption feed
   const recentTranscripts = transcript.slice(-6);
 
   return (
     <div className="h-full flex flex-col justify-end py-2 pr-2 overflow-hidden">
-      {recentTranscripts.map((t, i) => {
-        // Calculate opacity based on position (newest is fully opaque, oldest fades out)
-        // Using Math.max to handle case where there is only 1 item
-        const opacity = recentTranscripts.length === 1 ? 1 : 0.2 + (0.8 * (i / (recentTranscripts.length - 1)));
-        
-        return (
-          <div 
-            key={`${i}-${t.text.substring(0, 20)}`}
-            className="mb-4 text-xl leading-relaxed text-gray-200 transition-all duration-500 animate-slideIn" 
-            style={{ opacity }}
-          >
-            <span className="font-semibold text-primary mr-3 text-lg">
-              {t.speaker}:
-            </span>
-            {t.text}
-          </div>
-        );
-      })}
+      <AnimatePresence initial={false}>
+        {recentTranscripts.map((t, i) => {
+          // Natural fade-out hierarchy
+          const maxIdx = recentTranscripts.length - 1;
+          const opacityVal = maxIdx === 0 ? 1 : 0.3 + (0.7 * (i / maxIdx));
+          
+          // Distinguish current speaker vs legacy rows
+          const isLast = i === maxIdx;
+
+          return (
+            <motion.div 
+              key={`${t.speaker}-${t.ts || i}-${t.text.substring(0, 15)}`}
+              layout
+              initial={{ opacity: 0, y: 20, scale: 0.95 }}
+              animate={{ 
+                opacity: opacityVal, 
+                y: 0, 
+                scale: 1,
+                transition: { type: "spring", stiffness: 300, damping: 30 } 
+              }}
+              exit={{ opacity: 0, y: -10, scale: 0.98, transition: { duration: 0.2 } }}
+              className={`mb-4 text-[19px] leading-relaxed font-medium select-none ${
+                isLast ? "text-white font-semibold" : "text-gray-400"
+              }`}
+            >
+              <span className={`mr-3 text-base font-bold uppercase tracking-wide ${
+                isLast ? "text-indigo-400 bg-indigo-500/10 px-2 py-0.5 rounded-md border border-indigo-500/20" : "text-gray-500"
+              }`}>
+                {t.speaker}
+              </span>
+              <span className="tracking-tight">
+                {t.text}
+              </span>
+            </motion.div>
+          );
+        })}
+      </AnimatePresence>
     </div>
   );
 }
