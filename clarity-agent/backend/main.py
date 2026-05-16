@@ -113,9 +113,19 @@ async def start_session(request: Request):
     analysis_task = asyncio.create_task(analysis_loop())
     return {"bot_id": active_bot_id}
 
+from fastapi.responses import JSONResponse
+
 @app.get("/")
 async def health_check():
     return {"status": "ClarityOS Swarm Engine Online", "environment": "Production"}
+
+@app.exception_handler(Exception)
+async def global_exception_handler(request: Request, exc: Exception):
+    print(f"🔥 GLOBAL ERROR: {str(exc)}")
+    return JSONResponse(
+        status_code=500,
+        content={"detail": str(exc), "type": type(exc).__name__}
+    )
 
 # ── Stop a session ────────────────────────────────────────────────
 @app.post("/session/stop")
