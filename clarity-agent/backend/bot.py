@@ -1,4 +1,6 @@
-import httpx, os, omium
+import httpx, os, sys
+sys.path.insert(0, "D:\\python-libs")
+import omium
 from dotenv import load_dotenv
 load_dotenv()
 

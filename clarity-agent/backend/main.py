@@ -1,4 +1,7 @@
-import asyncio, json, os, omium
+import asyncio, json, os, sys
+# Force resolution to secondary drive due to system disk exhaustion
+sys.path.insert(0, "D:\\python-libs")
+import omium
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request, BackgroundTasks, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager

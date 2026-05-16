@@ -1,4 +1,6 @@
-import os, asyncio, omium
+import os, asyncio, sys
+sys.path.insert(0, "D:\\python-libs")
+import omium
 from typing import List
 from pydantic import BaseModel, Field
 from agno.agent import Agent
