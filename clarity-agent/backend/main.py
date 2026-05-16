@@ -1,4 +1,4 @@
-import asyncio, json, os
+import asyncio, json, os, omium
 from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request, BackgroundTasks, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
@@ -41,6 +41,7 @@ async def websocket_endpoint(ws: WebSocket):
 
 # ── Recall.ai sends transcripts here ─────────────────────────────
 @app.post("/webhook/transcript")
+@omium.trace()
 async def transcript_webhook(request: Request):
     body = await request.json()
     print("WEBHOOK RECEIVED:", json.dumps(body, indent=2))
@@ -72,6 +73,7 @@ async def transcript_webhook(request: Request):
 
 # ── Start a session ───────────────────────────────────────────────
 @app.post("/session/start")
+@omium.trace()
 async def start_session(request: Request):
     global active_bot_id, analysis_task, customer_name, all_flags, resolved_quotes
     body = await request.json()
@@ -119,6 +121,7 @@ async def health_check():
 
 # ── Stop a session ────────────────────────────────────────────────
 @app.post("/session/stop")
+@omium.trace()
 async def stop_session():
     global active_bot_id, analysis_task
     if active_bot_id:
@@ -137,6 +140,7 @@ async def stop_session():
     return {"ok": True}
 # ── Resolve ambiguity from frontend ──────────────────────────────
 @app.post("/session/resolve")
+@omium.trace()
 async def resolve_ambiguity(request: Request):
     global resolved_quotes
     body = await request.json()
@@ -148,6 +152,7 @@ async def resolve_ambiguity(request: Request):
 
 # ── Interactive Client Replicant Chat Sandbox ─────────────────────
 @app.post("/session/persona/chat")
+@omium.trace()
 async def chat_with_persona(request: Request):
     body = await request.json()
     message = body.get("message", "")
@@ -222,6 +227,7 @@ async def stop_session(background_tasks: BackgroundTasks):
     return {"ok": True}
 
 # ── Ambiguity detection loop (runs every 15 seconds) ─────────────
+@omium.trace()
 async def analysis_loop():
     global all_flags
     seen_quotes = set()

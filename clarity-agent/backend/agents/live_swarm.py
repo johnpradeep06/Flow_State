@@ -1,4 +1,4 @@
-import os, asyncio
+import os, asyncio, omium
 from typing import List
 from pydantic import BaseModel, Field
 from agno.agent import Agent
@@ -82,6 +82,7 @@ critic_agent = Agent(
 
 # --- Supervisor Pipeline Coordinator ---
 
+@omium.trace()
 async def live_supervisor(chunk: str, customer_name: str, manager) -> List[dict]:
     """
     Coordinates the Live Swarm Agents using an optimized short-circuit pipeline.

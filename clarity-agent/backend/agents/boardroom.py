@@ -1,4 +1,4 @@
-import os, asyncio
+import os, asyncio, omium
 from typing import List, Set
 from pydantic import BaseModel, Field
 from agno.agent import Agent
@@ -147,6 +147,7 @@ def clarity_scorer(all_flags: List[dict], resolved_quotes: Set[str], full_transc
 
 # --- Post-Session Coordinator (FastAPI Background Task Target) ---
 
+@omium.trace()
 async def session_director(full_transcript: str, all_flags: List[dict], resolved_quotes: Set[str], manager) -> None:
     """
     Generates the final post-meeting report asynchronously and broadcasts it via WebSocket.
