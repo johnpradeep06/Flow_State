@@ -3,7 +3,8 @@ from dotenv import load_dotenv
 load_dotenv()
 
 RECALL_KEY = os.getenv("RECALL_API_KEY")
-BASE = "https://ap-northeast-1.recall.ai/api/v1"
+RECALL_REGION = os.getenv("RECALL_REGION", "us-west-2").strip()
+BASE = f"https://{RECALL_REGION}.recall.ai/api/v1"
 
 async def join_meeting(meet_url: str, webhook_url: str) -> str:
     """Send a bot to a Google Meet. Returns bot_id."""

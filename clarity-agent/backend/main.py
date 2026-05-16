@@ -103,7 +103,13 @@ async def start_session(request: Request):
         
     print(f"Configuring Recall.ai routing target: {webhook_url}")
 
-    active_bot_id = await join_meeting(meet_url, webhook_url)
+    try:
+        active_bot_id = await join_meeting(meet_url, webhook_url)
+        print(f"✅ Bot successfully provisioned: {active_bot_id}")
+    except Exception as e:
+        print(f"❌ Bot deployment failed: {str(e)}")
+        raise e
+        
     analysis_task = asyncio.create_task(analysis_loop())
     return {"bot_id": active_bot_id}
 
