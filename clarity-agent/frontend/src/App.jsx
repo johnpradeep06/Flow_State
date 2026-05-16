@@ -38,6 +38,7 @@ function Dashboard() {
 
 
   const startSession = async (meetUrl, webhookUrl, customerName) => {
+    const apiBase = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
     try {
       // Fully purge store state on boot
       useSessionStore.setState({ 
@@ -48,7 +49,7 @@ function Dashboard() {
         agentStates: {} 
       });
       
-      await fetch(`${import.meta.env.VITE_API_BASE_URL}/session/start`, {
+      await fetch(`${apiBase}/session/start`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
@@ -84,7 +85,7 @@ function Dashboard() {
 
       // Forward user to their isolated boardroom dashboard
       navigate(`/c/${companyId}/p/${projectId}/report/${activeMeetingId}`); 
-      await fetch(`${import.meta.env.VITE_API_BASE_URL}/session/stop`, { method: "POST" });
+      await fetch(`${apiBase}/session/stop`, { method: "POST" });
     } catch (err) {
       console.error("Failed to stop session", err);
     }

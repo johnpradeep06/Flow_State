@@ -77,7 +77,8 @@ export const useSessionStore = create(
 
         // Sync back to local backend for mathematical clarity scoring
         try {
-          await fetch(`${import.meta.env.VITE_API_BASE_URL}/session/resolve`, {
+          const apiBase = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
+          await fetch(`${apiBase}/session/resolve`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ quote })
