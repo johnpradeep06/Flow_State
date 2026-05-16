@@ -107,7 +107,28 @@ async def start_session(request: Request):
     analysis_task = asyncio.create_task(analysis_loop())
     return {"bot_id": active_bot_id}
 
+@app.get("/")
+async def health_check():
+    return {"status": "ClarityOS Swarm Engine Online", "environment": "Production"}
+
 # ── Stop a session ────────────────────────────────────────────────
+@app.post("/session/stop")
+async def stop_session():
+    global active_bot_id, analysis_task
+    if active_bot_id:
+        try:
+            await leave_meeting(active_bot_id)
+            print(f"Bot {active_bot_id} dismissed from session.")
+        except Exception as e:
+            print(f"Error dismissing bot: {e}")
+        active_bot_id = None
+        
+    if analysis_task:
+        analysis_task.cancel()
+        analysis_task = None
+        print("Real-time analysis pipeline suspended.")
+        
+    return {"ok": True}
 # ── Resolve ambiguity from frontend ──────────────────────────────
 @app.post("/session/resolve")
 async def resolve_ambiguity(request: Request):
