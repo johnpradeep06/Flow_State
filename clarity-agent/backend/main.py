@@ -1,5 +1,5 @@
 import asyncio, json, os
-from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request, BackgroundTasks
+from fastapi import FastAPI, WebSocket, WebSocketDisconnect, Request, BackgroundTasks, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from contextlib import asynccontextmanager
 from agno.agent import Agent
@@ -108,7 +108,7 @@ async def start_session(request: Request):
         print(f"✅ Bot successfully provisioned: {active_bot_id}")
     except Exception as e:
         print(f"❌ Bot deployment failed: {str(e)}")
-        raise e
+        raise HTTPException(status_code=500, detail=str(e))
         
     analysis_task = asyncio.create_task(analysis_loop())
     return {"bot_id": active_bot_id}
