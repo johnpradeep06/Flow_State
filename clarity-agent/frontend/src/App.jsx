@@ -48,7 +48,7 @@ function Dashboard() {
         agentStates: {} 
       });
       
-      await fetch("http://localhost:8000/session/start", {
+      await fetch(`${import.meta.env.VITE_API_BASE_URL}/session/start`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
@@ -84,7 +84,7 @@ function Dashboard() {
 
       // Forward user to their isolated boardroom dashboard
       navigate(`/c/${companyId}/p/${projectId}/report/${activeMeetingId}`); 
-      await fetch("http://localhost:8000/session/stop", { method: "POST" });
+      await fetch(`${import.meta.env.VITE_API_BASE_URL}/session/stop`, { method: "POST" });
     } catch (err) {
       console.error("Failed to stop session", err);
     }

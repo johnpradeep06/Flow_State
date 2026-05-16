@@ -16,7 +16,11 @@ export function useWebSocket(onMessage) {
     const connect = () => {
       if (!isMounted) return;
       
-      ws.current = new WebSocket("ws://localhost:8000/ws");
+      const apiBase = import.meta.env.VITE_API_BASE_URL || "http://localhost:8000";
+      const wsProtocol = apiBase.startsWith("https") ? "wss" : "ws";
+      const wsUrl = `${apiBase.replace(/^https?/, wsProtocol)}/ws`;
+      
+      ws.current = new WebSocket(wsUrl);
       
       ws.current.onmessage = (e) => {
         const msg = JSON.parse(e.data);

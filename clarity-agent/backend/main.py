@@ -87,16 +87,17 @@ async def start_session(request: Request):
     print(f"Starting Session. Monitoring Customer: '{customer_name}'")
 
     # Secure & sanitize webhook destination
+    public_url = os.getenv("PUBLIC_URL", "").strip()
     webhook_url = body.get("webhook_url", "").strip()
     
     if not webhook_url:
-        webhook_url = "https://demote-charter-enforcer.ngrok-free.dev"
+        webhook_url = public_url if public_url else "https://demote-charter-enforcer.ngrok-free.dev"
         
     # Auto-fix missing protocols
     if webhook_url and not webhook_url.startswith("http"):
         webhook_url = "https://" + webhook_url
         
-    # Auto-append proper FastAPI routing path if user only provided base ngrok domain
+    # Auto-append proper FastAPI routing path if user only provided base ngrok/railway domain
     if "/webhook/transcript" not in webhook_url:
         webhook_url = webhook_url.rstrip("/") + "/webhook/transcript"
         
