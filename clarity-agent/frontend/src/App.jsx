@@ -19,6 +19,7 @@ import MeetingPortal from "./pages/MeetingPortal";
 import ReportPage from "./pages/ReportPage";
 
 function Dashboard() {
+  const apiBase = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
   const [running, setRunning] = useState(false);
   const { 
     transcript, 
@@ -38,7 +39,6 @@ function Dashboard() {
 
 
   const startSession = async (meetUrl, webhookUrl, customerName) => {
-    const apiBase = (import.meta.env.VITE_API_BASE_URL || "").replace(/\/$/, "");
     try {
       // Fully purge store state on boot
       useSessionStore.setState({ 
