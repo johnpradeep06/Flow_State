@@ -95,6 +95,6 @@ Integrated with **Omium**, providing a "Trace Hub" where users can see the swarm
 ---
 
 ## ⚖️ License
-Agent Flow is proprietary software built for the [Hackathon Name] competition. 
+Agent Flow is proprietary software built for Biera 
 
 **Developed by John Pradeep.**
